@@ -13,16 +13,17 @@ console.log("Original numbers list: ", numbers)
 
 //To keep the original array immutable we have to create a new one and copy the items of the original array to it.
 
-const sortedNumbers = [...numbers];
+const unsortedNumbers = [...numbers];
 
-console.log("copied numbers list: ", sortedNumbers)
+console.log("copied numbers list: ", unsortedNumbers)
 
 //Now we can mutate the sortedNumbers list while keeping the original one intact.
 
 let shift; //This variable helps us stop excuting if the array is already sorted.
 
 
-function AscendBubbleSort(unsortedNumbers){
+function ascendBubbleSort(unsortedNumbers){
+	  do{
 	  shift = false;
 	  let endOfArray = unsortedNumbers.length - 1; //This variable stops the loop before the last item, since the code is always looking at the item on the left.
 	  
@@ -36,18 +37,19 @@ function AscendBubbleSort(unsortedNumbers){
 	  	    }
 	  }
 	  endOfArray --;
+	  }while(shift)
+	  return unsortedNumbers;
 }
 
-do {
-	 AscendBubbleSort(sortedNumbers);
-}while(shift);
-
-
-console.log("Numbers list After Ascend sorting: ", sortedNumbers)
 
 
 
-function DescendBubbleSort(unsortedNumbers){
+console.log("Numbers list After Ascend sorting: ",ascendBubbleSort(unsortedNumbers))
+
+
+
+function descendBubbleSort(unsortedNumbers){
+	  do {
 	  shift = false;
 	  let endOfArray = unsortedNumbers.length - 1;
 	  for (let i = 0; i < endOfArray; i++){
@@ -60,22 +62,38 @@ function DescendBubbleSort(unsortedNumbers){
 	  	    }
 	  }
 	  endOfArray --;
+	  }while(shift)
+	  return unsortedNumbers;
 }
 
 
-do {
-	 DescendBubbleSort(sortedNumbers);
-}while(shift);
 
 
-console.log("Numbers list After Desc sorting: ", sortedNumbers)
 
-function readFileIntoArray(fileName){
+console.log("Numbers list After Desc sorting: ", descendBubbleSort(unsortedNumbers))
+
+function sortArrayFromFile(fileName){
 	 var fs = require('fs')
-	 var array = fs.readFileSync(fileName).toString().split(",");
-	 return array;
+	 var array = fs.readFileSync(fileName).toString().split(",")
+	 .map(function(item) { return parseInt(item, 10)});
+	 ascendBubbleSort(array);
+	 console.log(array);
+	 return array
 }
 
-console.log(readFileIntoArray('data.txt'));
+//This function turns the data from the text file into an array
 
+function outputFile(content){
+	var fs = require('fs');
+	 fs.writeFile("output.txt", content, function (err){
+	 	 if (err) { console.log(err); 
+	 	 }
+	 	  else { console.log("File saved");
+	 	   }
+	 	    });
+	}
+
+//This function  outputs the sorted array.
+
+outputFile(sortArrayFromFile('data.txt'));
 
